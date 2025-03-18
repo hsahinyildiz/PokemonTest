@@ -1,21 +1,27 @@
-import * as React from 'react';
-import { NavigationContainer } from '@react-navigation/native';
+import React from "react";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-
-import PokemonList from './src/PokemonList';
-import PokemonDetail from './src/PokemonDetail';
+import { NavigationContainer } from "@react-navigation/native";
+import { Provider } from "react-redux";
+import { PersistGate } from "redux-persist/integration/react";
+import { store, persistor } from "./store";
+import PokemonList from "./src/PokemonList";
+import PokemonDetail from "./src/PokemonDetail";
 
 const Stack = createNativeStackNavigator();
 
-export default function App() {
+const App = () => {
   return (
-    <NavigationContainer>
-      <Stack.Navigator
-        initialRouteName="PokemonList"
-        screenOptions={{ headerShown: false }}>
-        <Stack.Screen name="PokemonList" component={PokemonList} />
-        <Stack.Screen name="PokemonDetail" component={PokemonDetail} />
-      </Stack.Navigator>
-    </NavigationContainer>
+    <Provider store={store}>
+      <PersistGate loading={null} persistor={persistor}>
+        <NavigationContainer>
+          <Stack.Navigator screenOptions={{ headerShown: true }}>
+            <Stack.Screen name="PokemonList" component={PokemonList} options={{ title: "Pokémon Listesi" }} />
+            <Stack.Screen name="PokemonDetail" component={PokemonDetail} options={{ title: "Kart Detayı" }} />
+          </Stack.Navigator>
+        </NavigationContainer>
+      </PersistGate>
+    </Provider>
   );
-}
+};
+
+export default App;
