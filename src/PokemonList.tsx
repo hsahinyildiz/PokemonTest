@@ -1,9 +1,11 @@
+import { useNavigation } from "@react-navigation/native";
 import React, { useEffect, useState } from "react";
 import { View, Text, FlatList, Image, ActivityIndicator, StyleSheet, TouchableOpacity } from "react-native";
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import { SafeAreaView } from "react-native-safe-area-context";
+import { NavigationProp } from "../navigationTypes";
 
-interface PokemonCardType {
+type PokemonCardType = {
   id: string;
   name: string;
   images: {
@@ -17,6 +19,7 @@ const PokemonList = () => {
   const [loading, setLoading] = useState<boolean>(true);
   const [isFetchingMore, setIsFetchingMore] = useState<boolean>(false);
   const [page, setPage] = useState<number>(1);
+  const navigation = useNavigation<NavigationProp>();
 
   const getCards = async () => {
     try {
@@ -55,10 +58,10 @@ const PokemonList = () => {
             keyExtractor={(item) => item.id}
             numColumns={2}
             renderItem={({ item }) => (
-              <TouchableOpacity onPress={() => {
-                console.log(item)
-              }}
-                activeOpacity={0.7} style={styles.card}>
+              <TouchableOpacity
+                onPress={() => navigation.navigate("PokemonDetail", { cardId: item.id })}
+                activeOpacity={0.7}
+                style={styles.card}>
                 <Image source={{ uri: item.images.small }} style={styles.image} />
                 <Text style={styles.name}>{item.name}</Text>
               </TouchableOpacity>
