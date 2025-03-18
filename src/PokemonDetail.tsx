@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from "react";
-import { View, Text, Image, ActivityIndicator, StyleSheet, FlatList } from "react-native";
+import { View, Text, Image, ActivityIndicator, StyleSheet, FlatList, TouchableOpacity } from "react-native";
 import { useRoute } from "@react-navigation/native";
 import { PokemonDetailRouteProp } from "../navigationTypes";
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import { SafeAreaView } from "react-native-safe-area-context";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState, toggleSaveCard } from "../store";
 
 type AbilityType = {
     name: string;
@@ -24,6 +26,10 @@ const PokemonDetail = () => {
     const { cardId } = route.params;
     const [card, setCard] = useState<PokemonCardType | null>(null);
     const [loading, setLoading] = useState(true);
+
+    const dispatch = useDispatch();
+    const savedCards = useSelector((state: RootState) => state.pokemon.savedCards);
+    const isSaved = savedCards.includes(cardId);
 
     useEffect(() => {
         const fetchCardDetail = async () => {
@@ -68,6 +74,12 @@ const PokemonDetail = () => {
                                 />
                             </View>
                         )}
+                        <TouchableOpacity
+                            activeOpacity={0.7}
+                            style={styles.button}
+                            onPress={() => dispatch(toggleSaveCard(cardId))}>
+                            <Text style={styles.buttonText}>{isSaved ? "Kartı Kaldır" : "Kartı Kaydet"}</Text>
+                        </TouchableOpacity>
                     </>
                 )}
             </View>
@@ -108,7 +120,8 @@ const styles = StyleSheet.create({
         color: '#000'
     },
     abilitiesView: {
-        marginTop: 10
+        marginTop: 10,
+        flex: 1,
     },
     abilityName: {
         fontSize: 14,
@@ -119,6 +132,17 @@ const styles = StyleSheet.create({
     abilityText: {
         fontSize: 14,
         color: "#000"
+    },
+    button: {
+        backgroundColor: "#000",
+        paddingVertical: 10,
+        paddingHorizontal: 12,
+        marginTop: 10
+    },
+    buttonText: {
+        color: "#fff",
+        fontSize: 14,
+        fontWeight: "bold"
     },
 });
 
