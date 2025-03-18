@@ -117,7 +117,7 @@ const styles = StyleSheet.create({
   },
   name: {
     marginTop: 8,
-    fontSize: wp("3.5%"),
+    fontSize: 14,
     fontWeight: "bold",
     textAlign: "center",
     color: '#000'
@@ -128,7 +128,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   footerText: {
-    fontSize: wp("3.5%"),
+    fontSize: 14,
     color: "#000",
     marginTop: 5,
   },
